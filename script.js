@@ -14,6 +14,15 @@ const countries = [
     {origin : 'Sri lanka', destination : 'England',airline : 'Sri lankan Air line'},
     {origin : 'Sri lanka', destination : 'South Africa',airline : 'Emirates'}
 ]
+
+const dates = [
+    { departure : '03/04/2021', arrival : '09/04/2021'}
+
+]
+
+const pax = [
+    { adults : '3', children : 3, infants : 1}
+]
 // Read Request Handlers
 //Display the message when the URL consist of '/'
 app.get('/'), (req,res) => {
@@ -35,8 +44,43 @@ app.get('/api/countries/:air line', (req, res) => {
         res.send(airline);
     }
 });
+//validate information in origin and destination
+function validatecountries(countries) {
+    const schema = {
+        origin: Joi.string().min(3).required() ,
+        destination: Joi.string().min(3).required(),
+        airline : Joi.string().min(3).required()
 
+    };
+    return Joi.validate(countries,schema);
 
+    //validate information
+    function validateDate(date) {
+        const schema = {
+            departure: Joi.date().min(8).required()
+
+        };
+        return Joi.validate(date,schema);
+
+//validate information
+function validatePax(pax) {
+    const schema = {
+        adults: Joi.string().min(1).required(),
+        children : Joi.string().min(1).required(),
+        infants : Joi.string().min(1).required()
+    };
+    return Joi.validate(pax,schema);
+}
+//create request handler
+//create new countries
+        app.post('/api/countries',(req,res)=> {
+            countries.push();
+            res.send();
+
+        }
+    });
+
+    }
 
 
 //port environment variable
