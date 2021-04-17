@@ -3,6 +3,13 @@ const  Joi = require('joi'); //Import Joi
 const  app = express(); //Create Express application on the top variable
 app.use(express.json()); //used the jason file
 
+
+const users = [
+    {username: 'hansi', id: '1'},
+    {username: 'chanula', id: '2'},
+    {username: 'hasaru', id: '3'},
+    {username: 'rashmina', id: '4'}
+];
 const countries = [
     {origin : 'Sri lanka', destination : 'Canada' ,airline : 'Sri lankan Air line'},
     {origin : 'Sri lanka', destination : 'India',airline : 'Emirates'},
@@ -44,8 +51,16 @@ app.get('/api/countries/:air line', (req, res) => {
         res.send(airline);
     }
 });
+
+//validate information in login
+function validateUser(users) {
+    const schema = {
+        username: Joi.string().min(3).required() };
+    return Joi.validate(users,schema);
+
+
 //validate information in origin and destination
-function validatecountries(countries) {
+function validateCountries(countries) {
     const schema = {
         origin: Joi.string().min(3).required() ,
         destination: Joi.string().min(3).required(),
@@ -77,10 +92,67 @@ function validatePax(pax) {
             countries.push();
             res.send();
 
-        }
-    });
+        });
 
+
+//create request handler
+//create new user
+app.post('/api/users', ((req, res) => {
+    const { error } = validateUser(req.body);
+    if (error){
+        res.status(400).send(error.details[0].message)
+        return
     }
+
+    //increment the user id
+    const user = {
+    id : users.length + 1,
+    username: req.body.username
+    }
+});
+
+//update request handler
+        //update existing user information
+        app.put('/api/users/:id', ((req, res) => {
+        const user = users.find(c.id ===parseInt(req.params.id);
+        if (user) res.status(404).send('<h2 style= "font-family: Malgun Gothic; color: #8b0000;">Not found!</h2>h2>')
+                const {error} = validateUser(req.body);
+        if (error){
+        res.status(400).send(error.detail[0].message);
+        return ;
+        }
+        user.username = req.body.username;
+        res.send(user);
+
+            //update request handler
+            //update existing destination information
+            app.put('/api/countries/:destination', ((req, res) => {
+                const country = countries.find(c.destination===String(req.params.destination);
+                if (destination) res.status(404).send('<h2 style= "font-family: Malgun Gothic; color: #8b0000;">Not found!</h2>h2>')
+                const {error} = validateDestination(req.body);
+                if (error){
+                    res.status(400).send(error.detail[0].message);
+                    return ;
+                }
+                country.destination= req.body.destination;
+                res.send(destination);
+
+                //delete request handler
+                //delete user details
+                app.delete('/api/user/:id', (req,res)=>
+                {
+                    const user = users.find(c.id ===parseInt(req.params.id);
+                    if (user) res.status(404).send('<h2 style= "font-family: Malgun Gothic; color: #8b0000;">Not found!</h2>h2>')
+                    const index = users.indexOf(user);
+                    users.splice(index,1);
+
+                    res.send(user)
+                }
+            );
+
+
+
+
 
 
 //port environment variable
